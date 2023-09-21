@@ -1,0 +1,64 @@
+body {
+    background-color: darkslategrey;
+    display: flex;
+    flex-direction: column;
+    margin: 0px;
+    font-family:'Roboto', arial;
+    gap: 20px;
+    padding: 0px;
+    margin: 0px;
+    min-height: 100vh;
+}
+
+/* ------------------------------------------------- */
+                /* HEADER SECTION */
+/* ------------------------------------------------- */
+
+.header-section {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    color: aliceblue;
+    align-items: center;
+    background-color: #1f2937;
+    padding-top: 50px;
+    padding-bottom: 50px;
+    font-size: 50px;
+}
+
+
+
+
+/* ------------------------------------------------- */
+                /* FOOTER SECTION */
+/* ------------------------------------------------- */
+
+.footer-section {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    color: aliceblue;
+    align-items: center;
+    background-color: #1f2937;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    font-size: 20px;
+    margin-top: auto;
+    gap: 20px;
+}
+
+.footer-link {
+    display: inline-flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+#github-link {
+    margin: 0;
+    padding: 0;
+}
+
+#github-image {
+    width: auto; /* Allow the image width to adjust based on its content */
+    height: 25px; /* Set a specific height for the image if needed */
+}
