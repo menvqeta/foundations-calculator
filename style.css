@@ -26,8 +26,68 @@ body {
     font-size: 50px;
 }
 
+/* ------------------------------------------------- */
+                /* CALCULATOR SECTION */
+/* ------------------------------------------------- */
+
+.calculcator-section {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.calculcator-body {
+    background-color: rgb(30, 30, 30);
+    padding: 16px;
+    border-radius: 5px;
+}
+
+/* ------------------------------------------------- */
+                /* CALCULATOR SCREEN SECTION */
+/* ------------------------------------------------- */
+
+.calculator-screen {
+    background-color: #00b1c5;
+    font-family: 'casio-fx-702p';
+    
+}
+
+@font-face {
+    font-family: 'casio-fx-702p';
+    font-style: normal;
+    font-weight: normal;
+    src: local('casio-fx-702p'), url('./fonts/casio-fx-702p.woff') format('woff');
+}
+
+.screen-line {
+    display: flex;
+    justify-content: flex-end;
+    padding: 5%;
+}
+
+#previous-result {
+    font-size: 15px;
+}
+#current-result {
+    font-size: 20px;
+    font-weight: bold;
+}
 
 
+/* ------------------------------------------------- */
+                /* CALCULATOR BUTTON SECTION */
+/* ------------------------------------------------- */
+
+button {
+    background-color: #1f2937;
+    border-radius: 5px;
+    font-size: 20px;
+    border: none;
+    color: aliceblue;
+    padding: 5px;
+    aspect-ratio: 1;
+}
 
 /* ------------------------------------------------- */
                 /* FOOTER SECTION */
