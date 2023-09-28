@@ -87,6 +87,7 @@ body {
 #previous-result {
     font-size: 20px;
     padding-bottom: 0px;
+    min-height: 1em;
 }
 #current-result {
     font-size: 30px;

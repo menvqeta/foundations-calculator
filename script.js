@@ -10,6 +10,13 @@ const addKey = document.querySelector("#add-key");
 const subtractKey = document.querySelector("#subtract-key");
 const multiplyKey = document.querySelector("#multiply-key");
 const divideKey = document.querySelector("#divide-key");
+const remainderKey = document.querySelector("#percent-key");
+const equalsKey = document.querySelector("#equals-key");
+
+let firstNumOfUpperScreen = '';
+let secondNumOfUpperScreen = '';
+let operator = '';
+let numOnLowerScreen = 0;
 
 function addEventListenersToNumbers() {
     for (let i = 0; i < numberButtons.length; i++) {
@@ -20,33 +27,30 @@ function addEventListenersToNumbers() {
 }
 
 function selectDigit(number) {
-    let currentNum = currentResult.textContent;
-    currentNum = currentNum.trim();
-    if((currentNum.length >= 1) && (currentNum.charAt(0) === '0')) {
-        currentNum = '';
-    }
-    currentNum+=number;
-    currentResult.textContent = currentNum;
+    numOnLowerScreen*=10;
+    numOnLowerScreen += +number;
+    currentResult.textContent = numOnLowerScreen;
 }
 
 function deleteDigit() {
-    let currentNum = currentResult.textContent;
-    currentNum = currentNum.slice(0, -1);
-    if(currentNum.length === 0) {
-        currentNum = '0';
-    }
-    currentResult.textContent = currentNum;
+    let remainder = numOnLowerScreen%10;
+    numOnLowerScreen-=remainder;
+    numOnLowerScreen/=10;
+    currentResult.textContent = numOnLowerScreen;
 }
 
 function clearScreen() {
-    currentResult.textContent = 0;
-    previousResult.textContent = '\n';
+    firstNumOfUpperScreen = '';
+    secondNumOfUpperScreen = '';
+    operator = '';
+    numOnLowerScreen = 0;
+    currentResult.textContent = numOnLowerScreen;
+    previousResult.textContent = `${firstNumOfUpperScreen} ${operator} ${secondNumOfUpperScreen}`;
 }
 
 function reverseSign() {
-    let currentNum = +currentResult.textContent;
-    currentNum*=(-1);
-    currentResult.textContent = currentNum;
+    numOnLowerScreen*=(-1);
+    currentResult.textContent = numOnLowerScreen;
 }
 
 function doesNumberContainDecimal(number) {
@@ -69,22 +73,50 @@ function addDecimal() {
 }
 
 function changePreviousResult(sign) {
-    if(previousResult.textContent.trim().length === 0) {
-        let prevNum = +currentResult.textContent.trim();
-        currentResult.textContent = '\n';
-        previousResult.textContent = `${prevNum} ${sign}`;
+    if(!firstNumOfUpperScreen) {
+        firstNumOfUpperScreen = numOnLowerScreen;
+        operator = sign;
+        numOnLowerScreen = 0;
+        previousResult.textContent = `${firstNumOfUpperScreen} ${operator} ${secondNumOfUpperScreen}`;
+        currentResult.textContent = numOnLowerScreen;
     }
     else {
-        let prevNum = +previousResult.textContent.slice(0, -1).trim();
-        if(currentResult.textContent.trim().length === 0) {
-            previousResult.textContent = `${prevNum} ${sign}`;
-            return;
+        if(numOnLowerScreen === 0) {
+            operator = sign;
+            previousResult.textContent = `${firstNumOfUpperScreen} ${operator} ${secondNumOfUpperScreen}`;
+            currentResult.textContent = numOnLowerScreen;
+
         }
-        let currentNum = +currentResult.textContent.trim();
-        let result = calculate(prevNum, currentNum, sign);
-        currentResult.textContent = '\n\n';
-        previousResult.textContent = `${result} ${sign}`;
+        else if(secondNumOfUpperScreen) {
+            firstNumOfUpperScreen = numOnLowerScreen;
+            operator = sign;
+            secondNumOfUpperScreen = '';
+            numOnLowerScreen = 0;
+            previousResult.textContent = `${firstNumOfUpperScreen} ${operator} ${secondNumOfUpperScreen}`;
+            currentResult.textContent = numOnLowerScreen; 
+        }
+        else {
+            let result = calculate(firstNumOfUpperScreen, numOnLowerScreen, operator);
+            if(result === 'WOOPS') {
+                handleDivideByZero(result);
+                return;
+            }
+            firstNumOfUpperScreen = result;
+            numOnLowerScreen = 0;
+            operator = sign;
+            previousResult.textContent = `${firstNumOfUpperScreen} ${operator} ${secondNumOfUpperScreen}`;
+            currentResult.textContent = numOnLowerScreen;            
+        }
     }
+}
+
+function handleDivideByZero(result) {
+    firstNumOfUpperScreen = '';
+    secondNumOfUpperScreen = '';
+    numOnLowerScreen = result;
+    operator = '';
+    previousResult.textContent = `${firstNumOfUpperScreen} ${operator} ${secondNumOfUpperScreen}`;
+    currentResult.textContent = numOnLowerScreen;
 }
 
 function calculate(first, second, sign) {
@@ -98,8 +130,26 @@ function calculate(first, second, sign) {
         return +first * +second;
     }
     else if(sign === '÷') {
+        if(second === 0) {
+            return "WOOPS";
+        }
         return +first / +second;
     }
+    else if(sign === '%') {
+        return +first % +second;
+    }
+}
+
+function afterEquals() {
+    let result = calculate(firstNumOfUpperScreen, numOnLowerScreen, operator);
+    if(result === 'WOOPS') {
+        handleDivideByZero(result);
+        return;
+    }
+    secondNumOfUpperScreen = numOnLowerScreen;
+    numOnLowerScreen = result;
+    previousResult.textContent = `${firstNumOfUpperScreen} ${operator} ${secondNumOfUpperScreen} =`;
+    currentResult.textContent = numOnLowerScreen;
 }
 
 addEventListenersToNumbers();
@@ -117,4 +167,5 @@ addKey.addEventListener('click', () => changePreviousResult('+'));
 subtractKey.addEventListener('click', () => changePreviousResult('-'));
 multiplyKey.addEventListener('click', () => changePreviousResult('*'));
 divideKey.addEventListener('click', () => changePreviousResult('÷'));
-
+remainderKey.addEventListener('click', () => changePreviousResult('%'));
+equalsKey.addEventListener('click', () => afterEquals());
